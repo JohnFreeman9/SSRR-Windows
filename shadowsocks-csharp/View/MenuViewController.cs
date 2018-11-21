@@ -282,7 +282,7 @@ namespace Shadowsocks.View {
                     SeperatorItem = new MenuItem("-"),
                     CreateMenuItem("Edit servers...", new EventHandler(Config_Click)),
                     new MenuItem("-"),
-                    CreateMenuItem("Import from file...", new EventHandler(Import_Click)),
+                    CreateMenuItem("Import servers from file...", new EventHandler(Import_Click)),
                     CreateMenuItem("Import from clipboard SSR links...", new EventHandler(CopyAddress_Click)),
                     CreateMenuItem("Import from screen QRCode...", new EventHandler(ScanQRCodeItem_Click)),
                     new MenuItem("-"),

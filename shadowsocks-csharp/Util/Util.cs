@@ -498,7 +498,8 @@ namespace Shadowsocks.Util
             {
                 "360Safe","ZhuDongFangYu",
                 "2345SoftSvc","2345RTProtect",
-                "BaiduAnSvc","BaiduHips"
+                "BaiduAnSvc","BaiduHips",
+                "QQPCTray", "QQPCRTP", "QQPCMgr"
             };
             foreach (string process_name in virus_process)
             {
@@ -510,7 +511,8 @@ namespace Shadowsocks.Util
             {
                 "360safe.exe","360se6.exe",
                 "2345MPCSafe.exe","2345Explorer.exe",
-                "baidubrowser.exe"
+                "baidubrowser.exe",
+                "QQPCTray.exe", "QQPCRTP.exe", "QQPCMgr.exe"
             };
             foreach (string registry_name in virus_registry)
             {
@@ -524,7 +526,7 @@ namespace Shadowsocks.Util
             if (offense_count != 0)
             {
                 //因为只有国行小白才会看到本消息，所以用中文就行了
-                MessageBox.Show(I18N.GetString("SSRR无法运行于安装有[360/2345/百度]产品的电脑，告辞！"));
+                MessageBox.Show(I18N.GetString("SSRR无法运行于安装有[360/2345/百度/腾讯]产品的电脑，告辞！"));
                 return true;
             }
             return false;
