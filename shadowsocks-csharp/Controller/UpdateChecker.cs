@@ -10,15 +10,15 @@ namespace Shadowsocks.Controller
 {
     public class UpdateChecker
     {
-        private const string UpdateURL = "https://raw.githubusercontent.com/CGDF-GitHub/shadowsocksrr-csharp/master/shadowsocks-csharp/ssr-win-4.0.xml";
+        private const string UpdateURL = "https://raw.githubusercontent.com/JohnFreeman9/SSRR-Windows/master/shadowsocks-csharp/ssr-win-4.0.xml";
 
         public string LatestVersionNumber;
         public string LatestVersionURL;
         public event EventHandler NewVersionFound;
 
-        public const string Name = "ShadowsocksR";
+        public const string Name = "ShadowsocksRR";
         public const string Copyright = "Copyright © BreakWa11 2017. Fork from Shadowsocks by clowwindy";
-        public const string Version = "5.1.5";
+        public const string Version = "5.1.6";
 #if !_CONSOLE
         public const string NetVer = "4.0";
 #else

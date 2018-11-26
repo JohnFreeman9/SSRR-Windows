@@ -39,8 +39,6 @@ namespace Shadowsocks.View {
         private UpdateFreeNode updateFreeNodeChecker;
         private UpdateSubscribeManager updateSubscribeManager;
 
-        private bool isBeingUsed = false;
-
         private NotifyIcon _notifyIcon;
         private ContextMenu contextMenu1;
 
@@ -70,7 +68,6 @@ namespace Shadowsocks.View {
         private string _urlToOpen;
         private System.Timers.Timer timerDetectVirus;
         private System.Timers.Timer timerDelayCheckUpdate;
-        private System.Timers.Timer timerUpdateLatency;
 
         private bool configfrom_open = false;
         private List<EventParams> eventList = new List<EventParams>();
@@ -114,10 +111,6 @@ namespace Shadowsocks.View {
             timerDelayCheckUpdate = new System.Timers.Timer(1000.0 * 10);
             timerDelayCheckUpdate.Elapsed += timerDelayCheckUpdate_Elapsed;
             timerDelayCheckUpdate.Start();
-
-            timerUpdateLatency = new System.Timers.Timer(1000.0 * 3);
-            timerUpdateLatency.Elapsed += timerUpdateLatency_Elapsed;
-            timerUpdateLatency.Start();
         }
 
         private void timerDetectVirus_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
@@ -143,23 +136,6 @@ namespace Shadowsocks.View {
             }
         }
 
-        private void timerUpdateLatency_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-            timerUpdateLatency.Interval = 1000.0 * 60 * 30;
-            timerUpdateLatency.Stop();
-            try {
-                Configuration configuration = _controller.GetCurrentConfiguration();
-                for (int i = 0; i < configuration.configs.Count; i++) {
-                    var server = configuration.configs[i];
-                    server.tcpingLatency();
-                    Utils.ReleaseMemory();
-                }
-            }
-            catch {
-                timerUpdateLatency.Interval = 1000.0 * 60;
-            }
-            UpdateServersMenu();
-            timerUpdateLatency.Start();
-        }
         void controller_Errored(object sender, System.IO.ErrorEventArgs e) {
             MessageBox.Show(e.GetException().ToString(), String.Format(I18N.GetString("Shadowsocks Error: {0}"), e.GetException().Message));
         }
@@ -635,21 +611,7 @@ namespace Shadowsocks.View {
                     group_name = def_group;
                 else
                     group_name = server.group;
-
-                string latency;
-                if (server.latency == Server.LATENCY_TESTING) {
-                    latency = "[testing]";
-                }
-                else if (server.latency == Server.LATENCY_ERROR) {
-                    latency = "[error]";
-                }
-                else if (server.latency == Server.LATENCY_PENDING) {
-                    latency = "[pending]";
-                }
-                else {
-                    latency = "[" + server.latency.ToString() + "ms]";
-                }
-                MenuItem item = new MenuItem(latency + " " + server.FriendlyName());
+                MenuItem item = new MenuItem(server.FriendlyName());
                 item.Tag = i;
                 item.Click += AServerItem_Click;
                 if (configuration.index == i) {
@@ -829,9 +791,6 @@ namespace Shadowsocks.View {
 
         void subScribeForm_FormClosed(object sender, FormClosedEventArgs e) {
             subScribeForm = null;
-            timerUpdateLatency = new System.Timers.Timer(1000.0 * 3);
-            timerUpdateLatency.Elapsed += timerUpdateLatency_Elapsed;
-            timerUpdateLatency.Start();
         }
 
         private void Config_Click(object sender, EventArgs e) {
@@ -884,11 +843,6 @@ namespace Shadowsocks.View {
                 timerDelayCheckUpdate.Stop();
                 timerDelayCheckUpdate = null;
             }
-            if (timerUpdateLatency != null) {
-                timerUpdateLatency.Elapsed -= timerUpdateLatency_Elapsed;
-                timerUpdateLatency.Stop();
-                timerUpdateLatency = null;
-            }
             _notifyIcon.Visible = false;
             Application.Exit();
         }
@@ -916,7 +870,7 @@ namespace Shadowsocks.View {
         }
 
         private void DonateItem_Click(object sender, EventArgs e) {
-            Process.Start("https://github.com/SoDa-GitHub/shadowsocksrr-csharp/blob/master/donate.jpg?raw=true");
+            Process.Start("https://github.com/");
         }
 
         [DllImport("user32.dll")]

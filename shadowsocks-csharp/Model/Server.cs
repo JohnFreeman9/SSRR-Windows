@@ -119,13 +119,6 @@ namespace Shadowsocks.Model
         public bool enable;
         public bool udp_over_tcp;
 
-        public int latency;
-
-        public static int LATENCY_ERROR = -2;
-        public static int LATENCY_PENDING = -1;
-        public static int LATENCY_TESTING = 0;
-
-
         private object protocoldata;
         private object obfsdata;
         private ServerSpeedLog serverSpeedLog = new ServerSpeedLog();
@@ -302,7 +295,6 @@ namespace Shadowsocks.Model
             group = "FreeSSR-public";
             udp_over_tcp = false;
             enable = true;
-            latency = LATENCY_PENDING;
             byte[] id = new byte[16];
             Util.Utils.RandBytes(id, id.Length);
             this.id = BitConverter.ToString(id).Replace("-", "");
@@ -514,50 +506,5 @@ namespace Shadowsocks.Model
             this.protocoldata = data;
         }
 
-        public void tcpingLatency()
-        {
-            var latencies = new List<double>();
-            var sock = new TcpClient();
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            try
-            {
-                Dns.GetHostAddresses(server);
-            }
-            catch (Exception)
-            {
-                latency = LATENCY_ERROR;
-                return;
-            }
-
-            var result = sock.BeginConnect(server, server_port, null, null);
-            if (result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(2)))
-            {
-                stopwatch.Stop();
-                latencies.Add(stopwatch.Elapsed.TotalMilliseconds);
-            }
-            else
-            {
-                stopwatch.Stop();
-            }
-
-            try
-            {
-                sock.Close();
-            }
-            catch (Exception)
-            {
-
-            }
-
-            if (latencies.Count != 0)
-            {
-                latency = (int)latencies.Average();
-            }
-            else
-            {
-                latency = LATENCY_ERROR;
-            }
-        }
     }
 }
