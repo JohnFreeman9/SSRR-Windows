@@ -398,7 +398,7 @@ namespace Shadowsocks.Model
             sysProxyMode = (int)ProxyMode.Global;
             proxyRuleMode = (int)ProxyRuleMode.BypassLanAndChina;
 
-            nodeFeedAutoUpdate = true;
+            nodeFeedAutoUpdate = false;
 
             serverSubscribes = new List<ServerSubscribe>()
             {
